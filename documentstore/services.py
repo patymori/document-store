@@ -253,6 +253,13 @@ class CreateJournal(CommandHandler):
         return session.journals.add(_journal)
 
 
+class AddIssueToJournal(CommandHandler):
+    def __call__(self, journal: str, issue: str) -> None:
+        session = self.Session()
+        _journal = session.journals.fetch(journal)
+        _journal.add_issue(issue)
+
+
 def get_handlers(Session: Callable[[], Session]) -> dict:
     return {
         "register_document": RegisterDocument(Session),
@@ -269,4 +276,5 @@ def get_handlers(Session: Callable[[], Session]) -> dict:
         "add_document_to_documents_bundle": AddDocumentToDocumentsBundle(Session),
         "insert_document_to_documents_bundle": InsertDocumentToDocumentsBundle(Session),
         "create_journal": CreateJournal(Session),
+        "add_issue_to_journal": AddIssueToJournal(Session),
     }

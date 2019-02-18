@@ -278,3 +278,28 @@ class CreateJournalTest(unittest.TestCase):
     def test_command_raises_exception_if_already_exists(self):
         self.command(id="xpto")
         self.assertRaises(exceptions.AlreadyExists, self.command, id="xpto")
+
+
+class AddIssueToJournalTest(unittest.TestCase):
+    def setUp(self):
+        self.services = make_services()
+        self.command = self.services.get("add_issue_to_journal")
+        create_journal_command = self.services.get("create_journal")
+        create_journal_command("0034-8910-rsp")
+
+    def test_command_interface(self):
+        self.assertIsNotNone(self.command)
+        self.assertTrue(callable(self.command))
+
+    def test_command_success(self):
+        self.assertIsNone(
+            self.command(journal="0034-8910-rsp", issue="0034-8910-rsp-48-2"))
+
+    def test_command_raises_exception_if_already_exists(self):
+        self.command(journal="0034-8910-rsp", issue="0034-8910-rsp-48-2")
+        self.assertRaises(
+            exceptions.AlreadyExists,
+            self.command,
+            journal="0034-8910-rsp",
+            issue="0034-8910-rsp-48-2"
+        )
